@@ -1,0 +1,18 @@
+<h1>SQL Server Tips and Tricks</h1>
+<p>
+    <h5>Stored procedure plan cache time</h5>
+    <code>
+        SELECT TOP(250)
+            p.name AS [SP Name]
+            , plan_handle
+            , ps.execution_count
+            , ps.cached_time
+        FROM sys.procedures p WITH (NOLOCK)
+        INNER JOIN sys.dm_exec_procedure_stats ps WITH (NOLOCK)
+            ON  p.[object_id] = ps.[object_id]
+        WHERE ps.database_id = DB_ID()
+        AND p.name = 'b2b_Bill_GetList_1'
+        ORDER BY ps.cached_time DESC
+        OPTION (RECOMPILE);
+    </code>
+</p>
